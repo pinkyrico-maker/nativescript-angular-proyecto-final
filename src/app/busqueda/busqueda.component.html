@@ -1,0 +1,84 @@
+<ActionBar title="Buscador NativeScript">
+    <ActionItem ios.position="right" android.position="actionBar" (tap)="onAnimarIconoActionBar($event)">
+        <Label #iconoHeader text="★" fontSize="22" color="#F59E0B" class="p-r-10"></Label>
+    </ActionItem>
+</ActionBar>
+
+<GridLayout rows="auto, auto, *" class="p-12">
+    <StackLayout row="0" class="m-b-8">
+        <TextField
+            #campoBusqueda="ngModel"
+            [(ngModel)]="terminoBusqueda"
+            (ngModelChange)="filtrarLista()"
+            appMinLongitud="3"
+            hint="Buscar por título o categoría (mín. 3 letras)..."
+            class="input p-10"
+            borderWidth="1"
+            borderColor="#CBD5E1"
+            borderRadius="8">
+        </TextField>
+
+        <Label
+            *ngIf="campoBusqueda.invalid && campoBusqueda.errors?.minLongitud"
+            [text]="'Escribe al menos ' + campoBusqueda.errors.minLongitud.requerido + ' caracteres para validar la búsqueda.'"
+            color="#DC2626"
+            fontSize="12"
+            class="m-t-4">
+        </Label>
+    </StackLayout>
+
+    <Label
+        row="1"
+        text="Desliza hacia abajo para actualizar • Toca un ítem para ver detalle"
+        fontSize="11"
+        color="#64748B"
+        class="m-b-8">
+    </Label>
+
+    <PullToRefresh row="2" (refresh)="onPullToRefresh($event)">
+        <ListView [items]="elementosFiltrados" (itemTap)="onItemTap($event)" separatorColor="#E2E8F0">
+            <ng-template let-item="item">
+                <FlexboxLayout
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    class="p-12"
+                    backgroundColor="#FFFFFF">
+
+                    <FlexboxLayout flexDirection="row" alignItems="center" flexGrow="1">
+                        <Image
+                            [src]="item.imagenSrc"
+                            width="42"
+                            height="42"
+                            stretch="aspectFit"
+                            class="m-r-10">
+                        </Image>
+
+                        <FlexboxLayout flexDirection="column" flexShrink="1">
+                            <Label [text]="item.titulo" fontWeight="bold" fontSize="15" color="#0F172A"></Label>
+                            <Label [text]="'Categoría: ' + item.categoria" fontSize="12" color="#2563EB"></Label>
+                        </FlexboxLayout>
+                    </FlexboxLayout>
+
+                    <FlexboxLayout flexDirection="row" alignItems="center">
+                        <Label
+                            text="⚙"
+                            width="40"
+                            height="40"
+                            fontSize="18"
+                            textAlignment="center"
+                            verticalAlignment="center"
+                            backgroundColor="#EFF6FF"
+                            color="#1D4ED8"
+                            borderRadius="20"
+                            (tap)="onCambiarCategoria($event, item)"
+                            (longPress)="onLongPressIcono($event, item)"
+                            (doubleTap)="onDoubleTapIcono($event, item)">
+                        </Label>
+                    </FlexboxLayout>
+
+                </FlexboxLayout>
+            </ng-template>
+        </ListView>
+    </PullToRefresh>
+</GridLayout>

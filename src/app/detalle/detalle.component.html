@@ -1,0 +1,47 @@
+<ActionBar title="Detalle del Elemento">
+    <NavigationButton text="Atrás" android.systemIcon="ic_menu_back" (tap)="volver()"></NavigationButton>
+</ActionBar>
+
+<ScrollView>
+    <StackLayout *ngIf="item" class="p-16">
+        <Image [src]="item.imagenSrc" width="80" height="80" stretch="aspectFit" horizontalAlignment="center" class="m-b-12"></Image>
+
+        <Label text="Editar título (two-way binding + directiva validadora):" fontWeight="bold" class="m-b-4"></Label>
+        <TextField
+            #tituloModel="ngModel"
+            [(ngModel)]="item.titulo"
+            appMinLongitud="4"
+            class="input p-10 m-b-4"
+            borderWidth="1"
+            borderColor="#CBD5E1"
+            borderRadius="8">
+        </TextField>
+
+        <Label
+            *ngIf="tituloModel.invalid && tituloModel.errors?.minLongitud"
+            text="El título debe tener al menos 4 caracteres."
+            color="#DC2626"
+            fontSize="12"
+            class="m-b-8">
+        </Label>
+
+        <Label [text]="'Categoría actual: ' + item.categoria" color="#2563EB" fontWeight="bold" class="m-t-8 m-b-8"></Label>
+
+        <Label text="Descripción:" fontWeight="bold" class="m-b-4"></Label>
+        <TextView
+            [(ngModel)]="item.descripcion"
+            height="90"
+            borderWidth="1"
+            borderColor="#CBD5E1"
+            borderRadius="8"
+            class="p-10 m-b-16">
+        </TextView>
+
+        <Button
+            text="Guardar y volver"
+            [isEnabled]="tituloModel.valid"
+            (tap)="guardarYVolver()"
+            class="btn btn-primary">
+        </Button>
+    </StackLayout>
+</ScrollView>
